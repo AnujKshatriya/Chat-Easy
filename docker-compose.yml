@@ -1,0 +1,38 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ${ENV_FILE:-./backend/.env.prod}
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    env_file:
+      - ${ENV_FILE:-./frontend/.env.prod}
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
