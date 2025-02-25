@@ -14,7 +14,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials : true
 }))
 
@@ -23,5 +23,5 @@ app.use('/api/v1/message',messageRouter)
 
 server.listen(port, ()=>{
     console.log("server is working on port : ", port)
-    connectDB()
+    connectDB().then(()=>console.log("DB connected")).catch((err)=>console.log(err))
 })
